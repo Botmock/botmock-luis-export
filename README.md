@@ -2,11 +2,12 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/tgof5738pfqppis7?svg=true)](https://ci.appveyor.com/project/nonnontrivial/botmock-luis-export)
 
-Import Botmock projects in Luis.ai
+Import Botmock content into Luis.ai with ease through a Luis-friendly JSON file with intents, training phrases, and variables taken from any Botmock Project.
 
-The script generates a `.json` file that can be imported from the Luis.ai dashboard.
+- Tutorial Video (Coming Soon)
+- [Documentation](http://help.botmock.com/en/articles/3322559-integration-guide-microsoft-luis-ai)
+- Support Email (mailto:help@botmock.com)
 
-> **Note**: this repo has just been rewritten to become `.json` import based, and the docs are still being updated.
 
 ## Getting Started
 First off, you will need to clone the code from: https://github.com/Botmock/botmock-botframework-export
