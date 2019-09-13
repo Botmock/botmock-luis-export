@@ -6,7 +6,7 @@ Import Botmock content into Luis.ai with ease through a Luis-friendly JSON file 
 
 - Tutorial Video (Coming Soon)
 - [Documentation](http://help.botmock.com/en/articles/3322559-integration-guide-microsoft-luis-ai)
-- Support Email (mailto:help@botmock.com)
+- [Support Email](mailto:help@botmock.com)
 
 
 ## Getting Started
