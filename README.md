@@ -33,7 +33,7 @@ BOTMOCK_PROJECT_ID="@YOUR-BOTMOCK-PROJECT-ID"
 OUTPUT_DIR=optional/directory/for/output
 ```
 
-To get your Botmock team ID you will need to visit http://app.botmock.com and login. Once logged in click on the "Teams" dropdown in the top bar and click on "Team Profile". For Botmock Project ID and Board ID, simply open the project you want to export and click on the "Settings" (cog) icon in the top toolbar of your project. Lastly, you will need to generate an API token for your team. This can be done by visiting your dashboard and clicking on your avatar in the top bar. In the dropdown select "Developer API" option. Under "Create an API token" enter a descriptive name and click on "Assign All Abilities" button. Then click "Create" button. This will generate a token for your. Please make sure you copy and paste the token in a secure place. This token will not be shown again. 
+To get your Botmock Token, Team ID, Board ID, and Project ID, see instructions in this tutorial: http://help.botmock.com/en/articles/3322559-integration-guide-microsoft-luis-ai . All of these values are required to run the export script properly.
 
 With this .env file, you can also choose an "Output Directory", which essentially allows you to tell the export script where to drop off the JSON file.
 
@@ -55,7 +55,7 @@ To do this, you have to do a few simple steps within Luis.ai:
 **Note: Every time you would like to upload a JSON file, you will need to do it by importing/creating a new app.**
 
 
-##Expected JSON Output
+## Expected JSON Output
 
 If you setup everything correctly within your .env file, this is the Luis-friendly output that you should have in your JSON file that generates in whichever directory you told it to go to.
 
