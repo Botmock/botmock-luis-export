@@ -10,11 +10,11 @@ Import Botmock content into Luis.ai with ease through a Luis-friendly JSON file 
 
 
 ## Getting Started
-First off, you will need to clone the code from: https://github.com/Botmock/botmock-botframework-export
+First off, you will need to clone the code from: https://github.com/NikV/botmock-luis-export/
 
 Once cloned, Clone this repository and install dependencies:
 
-``git clone git@github.com:Botmock/botmock-botframework-export.git``
+``git clone git@github.com:Botmock/botmock-luis-export.git``
 
 cd botmock-botframework-export
 
