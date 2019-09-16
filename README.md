@@ -17,7 +17,7 @@ Once cloned, Clone this repository and install dependencies:
 
 ``git clone git@github.com:Botmock/botmock-luis-export.git``
 
-cd botmock-botframework-export
+``cd botmock-luis-export``
 
 ```npm i```
 
