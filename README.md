@@ -147,6 +147,4 @@ _NOTE: Make sure to leave any sensitive information out of an issue when reporti
 ## License
 
 Botmock Microsoft Luis.ai Integration is copyright © 2019 Botmock. It is free software, and may be redistributed under the terms specified in the LICENSE file. Luis.ai is a property of Microsoft Corporation.
-=======
-> **Note**: This script uses (Sentry)[https://docs.sentry.io/] for **error reporting** by default. If you wish to opt out of error reporting, you can set the `SHOULD_OPT_OUT_OF_ERROR_REPORTING` environment variable to `true`.
 
