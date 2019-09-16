@@ -4,6 +4,7 @@ import pkg from "./package.json";
 import path from "path";
 import chalk from "chalk";
 import * as Sentry from "@sentry/node";
+import { writeJson } from "fs-extra";
 import { remove, mkdirp, writeJSON } from "fs-extra";
 import { default as APIWrapper } from "./lib/project";
 import { SENTRY_DSN } from "./lib/constants";
@@ -100,7 +101,15 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
 process.on("unhandledRejection", () => {});
 process.on("uncaughtException", () => {});
 
-main(process.argv).catch((err: Error) => {
+main(process.argv).catch(async (err: Error) => {
   log(err.message, { hasError: true });
-  Sentry.captureException(err);
+  if (!process.env.SHOULD_OPT_OUT_OF_ERROR_REPORTING) {
+    Sentry.captureException(err);
+  } else {
+    const { message, stack } = err;
+    await writeJson(path.join(__dirname, "err.json"), {
+      message,
+      stack
+    });
+  }
 });

@@ -6,4 +6,4 @@ Import Botmock projects in Luis.ai
 
 The script generates a `.json` file that can be imported from the Luis.ai dashboard.
 
-> **Note**: this repo has just been rewritten to become `.json` import based, and the docs are still being updated.
+> **Note**: This script uses (Sentry)[https://docs.sentry.io/] for **error reporting** by default. If you wish to opt out of error reporting, you can set the `SHOULD_OPT_OUT_OF_ERROR_REPORTING` environment variable to `true`.
