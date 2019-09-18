@@ -86,11 +86,15 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
             ...intent.utterances.map(utterance => ({
               text: utterance.text.replace(/%/g, ""),
               intent: intent.name,
-              entities: utterance.variables.map(variable => ({
-                entity: variable.name.replace(/%/g, ""),
-                startPos: variable.start_index,
-                endPos: parseInt(variable.start_index, 10) + variable.name.length - 3
-              }))
+              entities: utterance.variables.map((variable, i: number) => {
+                const indexOffset = i * 2;
+                const SURROUNDING_VARIABLE_SIGN_OFFSET = 3;
+                return {
+                  entity: variable.name.replace(/%/g, ""),
+                  startPos: parseInt(variable.start_index, 10) - indexOffset,
+                  endPos: parseInt(variable.start_index, 10) + variable.name.length - SURROUNDING_VARIABLE_SIGN_OFFSET - indexOffset
+                }
+              })
             }))
           ]
         }, [])
