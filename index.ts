@@ -51,6 +51,7 @@ async function main(args: string[]): Promise<void> {
     const projectData = await apiWrapper.fetch();
     await writeToOutput(projectData, outputDir);
   } catch (err) {
+    log(err.stack, { hasError: true });
     throw err;
   }
   log("done");
@@ -106,7 +107,6 @@ process.on("unhandledRejection", () => {});
 process.on("uncaughtException", () => {});
 
 main(process.argv).catch(async (err: Error) => {
-  log(err.message, { hasError: true });
   if (!process.env.SHOULD_OPT_OUT_OF_ERROR_REPORTING) {
     Sentry.captureException(err);
   } else {
