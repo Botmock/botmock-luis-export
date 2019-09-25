@@ -8,7 +8,14 @@ Import Botmock content into Luis.ai with ease through a Luis-friendly JSON file 
 - [Documentation](http://help.botmock.com/en/articles/3322559-integration-guide-microsoft-luis-ai)
 - [Support Email](mailto:help@botmock.com)
 
+## Prerequisites
+Node.js >= 11.x
 
+Which can be checked by running:
+
+``
+node --version
+``
 
 ## Getting Started
 First off, you will need to clone the code from: https://github.com/Botmock/botmock-luis-export/
