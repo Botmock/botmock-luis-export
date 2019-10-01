@@ -1,6 +1,6 @@
 import "dotenv/config";
-// @ts-ignore
-import pkg from "./package.json";
+// import { wrapEntitiesWithChar } from "@botmock-api/text";
+import { RewriteFrames } from "@sentry/integrations";
 import path from "path";
 import chalk from "chalk";
 import * as Sentry from "@sentry/node";
@@ -9,14 +9,41 @@ import { remove, mkdirp, writeJSON } from "fs-extra";
 import { default as APIWrapper } from "./lib/project";
 import { SENTRY_DSN } from "./lib/constants";
 import * as Assets from "./lib/types";
+// @ts-ignore
+import pkg from "./package.json";
+
+declare global {
+  namespace NodeJS {
+    interface Global {
+      __rootdir__: string;
+    }
+  }
+}
+
+global.__rootdir__ = __dirname || process.cwd();
+
+Sentry.init({
+  dsn: SENTRY_DSN,
+  release: `${pkg.name}@${pkg.version}`,
+  integrations: [new RewriteFrames({
+    root: global.__rootdir__
+  })],
+  beforeSend(event): Sentry.Event {
+    // if (event.user.email) {
+    //   delete event.user.email;
+    // }
+    return event;
+  }
+});
 
 Sentry.init({
   dsn: SENTRY_DSN,
   release: `botmock-luis-export@${pkg.version}`,
+  
 });
 
 interface LogConfig {
-  hasError: boolean;
+  readonly hasError: boolean;
 }
 
 function log(str: string | number, config: LogConfig = { hasError: false }): void {
@@ -49,6 +76,7 @@ async function main(args: string[]): Promise<void> {
   try {
     log("fetching botmock assets");
     const projectData = await apiWrapper.fetch();
+    log(`generating json`);
     await writeToOutput(projectData, outputDir);
   } catch (err) {
     log(err.stack, { hasError: true });
@@ -59,7 +87,6 @@ async function main(args: string[]): Promise<void> {
 
 export async function writeToOutput(projectData: Partial<Assets.Project>, outputDir: string): Promise<void> {
   const writeDir = path.join(outputDir, `${projectData.project.name}.json`)
-  log(`generating json for project in ${writeDir}`);
   return await writeJSON(
     writeDir,
     {
@@ -107,7 +134,7 @@ process.on("unhandledRejection", () => {});
 process.on("uncaughtException", () => {});
 
 main(process.argv).catch(async (err: Error) => {
-  if (!process.env.SHOULD_OPT_OUT_OF_ERROR_REPORTING) {
+  if (process.env.OPT_IN_ERROR_REPORTING) {
     Sentry.captureException(err);
   } else {
     const { message, stack } = err;
