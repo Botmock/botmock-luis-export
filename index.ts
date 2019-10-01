@@ -1,6 +1,7 @@
 import "dotenv/config";
 // import { wrapEntitiesWithChar } from "@botmock-api/text";
 import { RewriteFrames } from "@sentry/integrations";
+import { EOL } from "os";
 import path from "path";
 import chalk from "chalk";
 import * as Sentry from "@sentry/node";
@@ -126,7 +127,7 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
             }))
           ]
         }, [])
-    }
+    }, { spaces: 2, EOL }
   );
 }
 
