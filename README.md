@@ -27,12 +27,13 @@ This file will contain some important information that will help the script extr
 
 You will need to setup the following variables:
 ```
-BOTMOCK_TOKEN="@YOUR-BOTMOCK-TOKEN"
-BOTMOCK_TEAM_ID="@YOUR-BOTMOCK-TEAM-ID"
-BOTMOCK_BOARD_ID="@YOUR-BOTMOCK-BOARD-ID"
-BOTMOCK_PROJECT_ID="@YOUR-BOTMOCK-PROJECT-ID"
+BOTMOCK_TOKEN=@YOUR-BOTMOCK-TOKEN
+BOTMOCK_TEAM_ID=@YOUR-BOTMOCK-TEAM-ID
+BOTMOCK_BOARD_ID=@YOUR-BOTMOCK-BOARD-ID
+BOTMOCK_PROJECT_ID=@YOUR-BOTMOCK-PROJECT-ID
 
 OUTPUT_DIR=optional/directory/for/output
+
 ```
 
 To get your Botmock Token, Team ID, Board ID, and Project ID, see instructions in this tutorial: http://help.botmock.com/en/articles/3322559-integration-guide-microsoft-luis-ai . All of these values are required to run the export script properly.
