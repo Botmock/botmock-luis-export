@@ -12,10 +12,10 @@ Import Botmock content into Luis.ai with ease through a Luis-friendly JSON file 
 
 - Node JS version 12.x
 
-``shell
+```shell
 #determine nodejs version
 node --version
-``
+```
 
 - A [Luis.ai](https://www.luis.ai/home) Account
 
