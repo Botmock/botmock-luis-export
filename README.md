@@ -8,7 +8,16 @@ Import Botmock content into Luis.ai with ease through a Luis-friendly JSON file 
 - [Documentation](http://help.botmock.com/en/articles/3322559-integration-guide-microsoft-luis-ai)
 - [Support Email](mailto:help@botmock.com)
 
+## Prerequisites
 
+- Node JS version 12.x
+
+```shell
+#determine nodejs version
+node --version
+```
+
+- A [Luis.ai](https://www.luis.ai/home) Account
 
 ## Getting Started
 First off, you will need to clone the code from: https://github.com/Botmock/botmock-luis-export/
@@ -33,7 +42,6 @@ BOTMOCK_BOARD_ID=@YOUR-BOTMOCK-BOARD-ID
 BOTMOCK_PROJECT_ID=@YOUR-BOTMOCK-PROJECT-ID
 
 OUTPUT_DIR=optional/directory/for/output
-
 ```
 
 To get your Botmock Token, Team ID, Board ID, and Project ID, see instructions in this tutorial: http://help.botmock.com/en/articles/3322559-integration-guide-microsoft-luis-ai . All of these values are required to run the export script properly.
