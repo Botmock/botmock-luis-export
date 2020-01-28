@@ -1,56 +1,22 @@
 import "dotenv/config";
-// import { wrapEntitiesWithChar } from "@botmock-api/text";
-import { RewriteFrames } from "@sentry/integrations";
 import { EOL } from "os";
 import path from "path";
-import chalk from "chalk";
+import { Batcher } from "@botmock-api/client";
+import { default as log } from "@botmock-api/log";
 import * as Sentry from "@sentry/node";
 import { writeJson } from "fs-extra";
 import { remove, mkdirp, writeJSON } from "fs-extra";
-import { default as APIWrapper } from "./lib/project";
-import { SENTRY_DSN } from "./lib/constants";
 import * as Assets from "./lib/types";
-// @ts-ignore
-import pkg from "./package.json";
 
-declare global {
-  namespace NodeJS {
-    interface Global {
-      __rootdir__: string;
-    }
-  }
-}
+// declare global {
+//   namespace NodeJS {
+//     interface Global {
+//       __rootdir__: string;
+//     }
+//   }
+// }
 
-global.__rootdir__ = __dirname || process.cwd();
-
-Sentry.init({
-  dsn: SENTRY_DSN,
-  release: `${pkg.name}@${pkg.version}`,
-  integrations: [new RewriteFrames({
-    root: global.__rootdir__
-  })],
-  beforeSend(event): Sentry.Event {
-    // if (event.user.email) {
-    //   delete event.user.email;
-    // }
-    return event;
-  }
-});
-
-Sentry.init({
-  dsn: SENTRY_DSN,
-  release: `botmock-luis-export@${pkg.version}`,
-  
-});
-
-interface LogConfig {
-  readonly hasError: boolean;
-}
-
-function log(str: string | number, config: LogConfig = { hasError: false }): void {
-  const method = !config.hasError ? "dim" : "bold";
-  console.info(chalk[method](`> ${str}`));
-}
+// global.__rootdir__ = __dirname || process.cwd();
 
 async function main(args: string[]): Promise<void> {
   let [, , outputDirectory] = args;
@@ -62,32 +28,34 @@ async function main(args: string[]): Promise<void> {
   log("recreating output directory");
   await remove(outputDir);
   await mkdirp(outputDir);
-  const apiWrapper = new APIWrapper({
-    token: process.env.BOTMOCK_TOKEN,
-    teamId: process.env.BOTMOCK_TEAM_ID,
-    projectId: process.env.BOTMOCK_PROJECT_ID,
-    boardId: process.env.BOTMOCK_BOARD_ID,
-  });
-  apiWrapper.on("asset-fetched", (assetName: string) => {
-    log(`fetched ${assetName}`);
-  });
-  apiWrapper.on("error", (err: Error) => {
-    throw err;
-  });
+  // ..
   try {
-    log("fetching botmock assets");
-    const projectData = await apiWrapper.fetch();
+    log("fetching assets");
+    // @ts-ignore
+    const { data: projectData } = await new Batcher({
+      token: process.env.BOTMOCK_TOKEN as string,
+      teamId: process.env.BOTMOCK_TEAM_ID as string,
+      projectId: process.env.BOTMOCK_PROJECT_ID as string,
+      boardId: process.env.BOTMOCK_BOARD_ID as string,
+    }).batchRequest([
+      "project",
+      "board",
+      "intents",
+      "entities",
+      "variables"
+    ]);
+    log("writing file");
     log(`generating json`);
     await writeToOutput(projectData, outputDir);
   } catch (err) {
-    log(err.stack, { hasError: true });
+    log(err.stack, { isError: true });
     throw err;
   }
   log("done");
 }
 
 export async function writeToOutput(projectData: Partial<Assets.Project>, outputDir: string): Promise<void> {
-  const writeDir = path.join(outputDir, `${projectData.project.name}.json`)
+  const writeDir = path.join(outputDir, `${projectData.project.name}.json`);
   return await writeJSON(
     writeDir,
     {
@@ -122,17 +90,17 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
                   entity: variable.name.replace(/%/g, ""),
                   startPos: parseInt(variable.start_index, 10) - indexOffset,
                   endPos: parseInt(variable.start_index, 10) + variable.name.length - SURROUNDING_VARIABLE_SIGN_OFFSET - indexOffset
-                }
+                };
               })
             }))
-          ]
+          ];
         }, [])
     }, { spaces: 2, EOL }
   );
 }
 
-process.on("unhandledRejection", () => {});
-process.on("uncaughtException", () => {});
+process.on("unhandledRejection", () => { });
+process.on("uncaughtException", () => { });
 
 main(process.argv).catch(async (err: Error) => {
   if (process.env.OPT_IN_ERROR_REPORTING) {
