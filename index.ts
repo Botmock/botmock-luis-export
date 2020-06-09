@@ -1,3 +1,5 @@
+// @ts-nocheck
+
 import "dotenv/config";
 import { EOL } from "os";
 import path from "path";
@@ -7,16 +9,6 @@ import * as Sentry from "@sentry/node";
 import { writeJson } from "fs-extra";
 import { remove, mkdirp, writeJSON } from "fs-extra";
 import * as Assets from "./lib/types";
-
-// declare global {
-//   namespace NodeJS {
-//     interface Global {
-//       __rootdir__: string;
-//     }
-//   }
-// }
-
-// global.__rootdir__ = __dirname || process.cwd();
 
 async function main(args: string[]): Promise<void> {
   let [, , outputDirectory] = args;
@@ -56,6 +48,7 @@ async function main(args: string[]): Promise<void> {
 
 export async function writeToOutput(projectData: Partial<Assets.Project>, outputDir: string): Promise<void> {
   const writeDir = path.join(outputDir, `${projectData.project.name}.json`);
+  const intentNames = projectData.intents.map((intent, i) => `${i}_${intent.name}`);
   return await writeJSON(
     writeDir,
     {
@@ -65,8 +58,8 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
       desc: projectData.project.platform,
       culture: "en-us",
       tokenizerVersion: "1.0.0",
-      intents: projectData.intents.map(intent => ({ name: intent.name })),
-      entities: projectData.variables.map(variable => ({ name: variable.name, roles: [] })),
+      intents: intentNames.map(name => ({ name })),
+      entities: projectData.entities.map(entity => ({ name: entity.name, roles: [] })),
       composites: [],
       closedLists: [],
       patternAnyEntities: [],
@@ -82,16 +75,22 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
             ...acc,
             ...intent.utterances.map(utterance => ({
               text: utterance.text.replace(/%/g, ""),
-              intent: intent.name,
-              entities: utterance.variables.map((variable, i: number) => {
-                const indexOffset = i * 2;
-                const SURROUNDING_VARIABLE_SIGN_OFFSET = 3;
-                return {
-                  entity: variable.name.replace(/%/g, ""),
-                  startPos: parseInt(variable.start_index, 10) - indexOffset,
-                  endPos: parseInt(variable.start_index, 10) + variable.name.length - SURROUNDING_VARIABLE_SIGN_OFFSET - indexOffset
-                };
-              })
+              intent: intentNames.find(name => name.endsWith(intent.name)),
+              entities: utterance.variables
+                .map((variable, i: number) => {
+                  const indexOffset = i * 2;
+                  const SURROUNDING_VARIABLE_SIGN_OFFSET = 3;
+                  const entity = projectData.entities.find(entity => entity.id === variable.entity);
+                  if (typeof entity === "undefined") {
+                    return undefined;
+                  }
+                  return {
+                    entity: entity.name,
+                    startPos: parseInt(variable.start_index, 10) - indexOffset,
+                    endPos: parseInt(variable.start_index, 10) + variable.name.length - SURROUNDING_VARIABLE_SIGN_OFFSET - indexOffset
+                  };
+                })
+                .filter(value => typeof value !== "undefined")
             }))
           ];
         }, [])
