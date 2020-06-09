@@ -48,6 +48,7 @@ async function main(args: string[]): Promise<void> {
 
 export async function writeToOutput(projectData: Partial<Assets.Project>, outputDir: string): Promise<void> {
   const writeDir = path.join(outputDir, `${projectData.project.name}.json`);
+  const intentNames = projectData.intents.map((intent, i) => `${i}_${intent.name}`);
   return await writeJSON(
     writeDir,
     {
@@ -57,7 +58,7 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
       desc: projectData.project.platform,
       culture: "en-us",
       tokenizerVersion: "1.0.0",
-      intents: projectData.intents.map(intent => ({ name: intent.name })),
+      intents: intentNames.map(name => ({ name })),
       entities: projectData.entities.map(entity => ({ name: entity.name, roles: [] })),
       composites: [],
       closedLists: [],
@@ -74,7 +75,7 @@ export async function writeToOutput(projectData: Partial<Assets.Project>, output
             ...acc,
             ...intent.utterances.map(utterance => ({
               text: utterance.text.replace(/%/g, ""),
-              intent: intent.name,
+              intent: intentNames.find(name => name.endsWith(intent.name)),
               entities: utterance.variables
                 .map((variable, i: number) => {
                   const indexOffset = i * 2;
