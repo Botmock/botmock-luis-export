@@ -1,6 +1,6 @@
 # Botmock Luis Export
 
-Node.js project for importing [Botmock](https://botmock.com) projects in [Luis](https://www.luis.ai/applications).
+Node.js project for importing [Botmock](https://botmock.com) projects in [Luis](https://www.luis.ai/applications)
 
 > **Note**: The deprecated version of this exporter can be found in the `legacy` branch.
 
