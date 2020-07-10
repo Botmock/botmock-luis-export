@@ -1,9 +1,8 @@
 {
   "name": "botmock-luis-export",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "import botmock projects in microsoft luis",
   "scripts": {
-    "test": "jest",
     "start": "ts-node index.ts"
   },
   "keywords": [
@@ -12,40 +11,17 @@
     "microsoft",
     "nodejs"
   ],
-  "prettier": {
-    "trailingComma": "es5",
-    "tabWidth": 2,
-    "printWidth": 80
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "tsConfig": "tsconfig.json"
-      }
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Botmock/botmock-luis-export.git"
   },
   "license": "MIT",
   "dependencies": {
-    "@botmock-api/client": "1.0.0",
-    "@botmock-api/log": "0.2.0",
-    "@sentry/integrations": "5.6.1",
-    "@sentry/node": "5.11.1",
-    "dotenv": "8.1.0",
-    "fs-extra": "8.1.0",
-    "node-fetch": "2.6.0"
+    "@botmock/export": "0.12.0",
+    "dotenv": "8.1.0"
   },
   "devDependencies": {
-    "@types/fs-extra": "8.0.0",
-    "@types/jest": "24.0.18",
     "@types/node": "13.5.0",
-    "@types/node-fetch": "2.5.0",
-    "jest": "24.9.0",
-    "ts-jest": "24.1.0",
     "ts-node": "8.6.2",
     "typescript": "3.7.5"
   }
